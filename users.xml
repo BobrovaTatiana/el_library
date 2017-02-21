@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<libUsers>
+    <users>List of users</users>
+    <user>
+        <id_user>4</id_user>
+        <firstname>Анастасия</firstname>
+        <lastname>Ягужинская</lastname>
+        <date_reg>2009-01-03T00:00:00+03:00</date_reg>
+        <email>anna@gardemarin.ru</email>
+        <login>sasha</login>
+    </user>
+    <user>
+        <id_user>5</id_user>
+        <firstname>Софья</firstname>
+        <lastname>Иванова</lastname>
+        <date_reg>2010-12-03T00:00:00+04:00</date_reg>
+        <email>sophi@gardemarin.ru</email>
+        <login>sophia</login>
+    </user>
+</libUsers>

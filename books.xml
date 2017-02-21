@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<libBook>
+    <books>List of books</books>
+    <book>
+        <id_book>6</id_book>
+        <type_publication>book</type_publication>
+        <name>Спящая красавица</name>
+        <year>1968</year>
+        <author>П.Шарльл</author>
+        <genre>сказки</genre>
+    </book>
+    <book>
+        <id_book>7</id_book>
+        <type_publication>article</type_publication>
+        <name>Как появилось Солнце</name>
+        <date_pub>2016-06-01T00:00:00+03:00</date_pub>
+        <year>0</year>
+        <author>Ел.Матвеева</author>
+        <genre>статьи</genre>
+    </book>
+</libBook>
