@@ -1,6 +1,7 @@
 package com.company.marshaling;
 
 import com.company.tables.Books;
+import com.company.tables.History;
 import com.company.tables.Users;
 
 import java.sql.*;
@@ -13,19 +14,11 @@ import java.util.Date;
  */
 public class DownloadFromBD {
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    private static final String ADURL = "jdbc:postgresql://localhost:5433/el_library";
-    private static final String LOGIN = "postgres";;
-    private static final String PASSWORD = "Vera2304";
 
-    public Lib_book loadBooks () throws SQLException, ClassNotFoundException {
+    public Lib_book loadBooks (Connection con) throws SQLException, ClassNotFoundException {
         Lib_book books = new Lib_book();
         books.setBooks("List of books");
         try {
-            Class.forName("org.postgresql.Driver");
-            String url = ADURL;
-            String login = LOGIN;
-            String password = PASSWORD;
-            Connection con = DriverManager.getConnection(url, login, password);
             try {
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT * FROM \"public\".\"Books\"");
@@ -45,8 +38,6 @@ public class DownloadFromBD {
                 stmt.close();
             } catch (ParseException e) {
                 e.printStackTrace();
-            } finally {
-                con.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,15 +58,10 @@ public class DownloadFromBD {
         return book;
     }
 
-    public Lib_users loadUsers () throws SQLException, ClassNotFoundException {
+    public Lib_users loadUsers (Connection con) throws SQLException, ClassNotFoundException {
         Lib_users users = new Lib_users();
         users.setUsers("List of users");
         try {
-            Class.forName("org.postgresql.Driver");
-            String url = ADURL;
-            String login = LOGIN;
-            String password = PASSWORD;
-            Connection con = DriverManager.getConnection(url, login, password);
             try {
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT * FROM \"public\".\"Users\"");
@@ -94,8 +80,6 @@ public class DownloadFromBD {
                 stmt.close();
             } catch (ParseException e) {
                 e.printStackTrace();
-            } finally {
-                con.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -115,4 +99,39 @@ public class DownloadFromBD {
         return user;
     }
 
+    public Lib_history loadHistory (Connection con) throws SQLException, ClassNotFoundException {
+        Lib_history history = new Lib_history();
+        history.setHistories("List of history");
+        try {
+            try {
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM \"public\".\"History\"");
+                while (rs.next()) {
+                    Integer id = Integer.parseInt(rs.getString("id"));
+                    Integer id_user = Integer.parseInt(rs.getString("id_user"));
+                    Integer id_book = Integer.parseInt(rs.getString("id_book"));
+                    Date date = rs.getDate("date");
+
+                    history.getHistory().add(createHistory(id, id_user, id_book, date));
+                }
+                rs.close();
+                stmt.close();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return history;
+    }
+
+    public History createHistory(int id, int id_user, int id_book, Date date) throws ParseException {
+        History history = new History();
+        history.setId(id);
+        history.setId_user(id_user);
+        history.setId_book(id_book);
+        history.setDate_red(date);
+
+        return history;
+    }
 }

@@ -11,14 +11,9 @@ public class UploadToBD {
     private static final String LOGIN = "postgres";;
     private static final String PASSWORD = "Vera2304";
 
-    public void uploadBooks (Object object) throws SQLException, ClassNotFoundException {
+    public void uploadBooks (Object object, Connection dbConnection) throws SQLException, ClassNotFoundException, InterruptedException {
         Lib_book books = (Lib_book) object;
-        Class.forName("org.postgresql.Driver");
-        String url = ADURL;
-        String login = LOGIN;
-        String password = PASSWORD;
-        Connection dbConnection = DriverManager.getConnection(url, login, password);
-        try {
+       // try {
             String insertTableSQL = "INSERT INTO public.\"Books\"(\n" +
                     "\t\"id_books\", \"type_publication\", \"name\", \"year\", \"date\", \"author\", \"genre\")\n" +
                     "\tVALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -42,24 +37,18 @@ public class UploadToBD {
 
             System.out.println("Record is inserted into Books table!");
             prepareStatement.close();
-        } catch (SQLException e) {
-
-            System.out.println(e.getMessage());
-            dbConnection.rollback();
-
-        } finally {
-                dbConnection.close();
-        }
+            //notifyAll();
+//        } catch (SQLException e) {
+//
+//            System.out.println(e.getMessage());
+//            dbConnection.rollback();
+//            //this.wait();
+//        }
     }
 
-    public void uploadUsers (Object object) throws SQLException, ClassNotFoundException {
+    public void uploadUsers (Object object, Connection dbConnection) throws SQLException, ClassNotFoundException, InterruptedException {
         Lib_users users = (Lib_users) object;
-        Class.forName("org.postgresql.Driver");
-        String url = ADURL;
-        String login = LOGIN;
-        String password = PASSWORD;
-        Connection dbConnection = DriverManager.getConnection(url, login, password);
-        try {
+        //try {
             String insertTableSQL = "INSERT INTO public.\"Users\"(\n" +
                     "\t\"id_user\", \"firstname\", \"lastname\", \"email\", \"date_reg\", \"login\")\n" +
                     "\tVALUES (?, ?, ?, ?, ?, ?);";
@@ -80,13 +69,44 @@ public class UploadToBD {
 
             System.out.println("Record is inserted into Users table!");
             prepareStatement.close();
-        } catch (SQLException e) {
+            //notifyAll();
+//        } catch (SQLException e) {
+//
+//            System.out.println(e.getMessage());
+//            dbConnection.rollback();
+//            //this.wait();
+//        }
+    }
 
-            System.out.println(e.getMessage());
-            dbConnection.rollback();
+    public void uploadHistory (Object object, Connection dbConnection) throws SQLException, ClassNotFoundException, InterruptedException {
+        Lib_history history = (Lib_history) object;
+        //try {
+            String insertTableSQL = "INSERT INTO public.\"History\"(\n" +
+                    "\t\"id\", \"id_user\", \"id_book\", \"date\")\n" +
+                    "\tVALUES (?, ?, ?, ?);";
+            PreparedStatement prepareStatement = dbConnection.prepareStatement(insertTableSQL);
+            dbConnection.setAutoCommit(false);
 
-        } finally {
-            dbConnection.close();
-        }
+            for (int i = 0; i < history.getHistory().size(); i++) {
+                prepareStatement.setInt(1, history.getHistory().get(i).getId());
+                prepareStatement.setInt(2, history.getHistory().get(i).getId_user());
+                prepareStatement.setInt(3, history.getHistory().get(i).getId_book());
+                prepareStatement.setDate(4, new Date(history.getHistory().get(i).getDate_red().getTime()));
+                prepareStatement.addBatch();
+            }
+            prepareStatement.executeBatch();
+            dbConnection.commit();
+            System.out.println("Record is inserted into History table!");
+            prepareStatement.close();
+            //notifyAll();
+       // }
+
+//        catch (SQLException e) {
+//            //e.printStackTrace();
+//            System.out.println(e.getMessage());
+//            dbConnection.rollback();
+//            //System.out.println("жду!!!");
+//            //this.wait();
+//        }
     }
 }
